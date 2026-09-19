@@ -3,7 +3,7 @@ import requests
 from django.shortcuts import render, get_object_or_404
 from .models import Equipo
 
-MICROSERVICIO_URL = os.environ.get("MICROSERVICIO_URL", "http://127.0.0.1:8001")
+MICROSERVICIO_URL = os.environ.get("MICROSERVICIO_URL", "https://microservicio-mantenimientos.onrender.com")
 
 def index(request):
     lista_equipos = Equipo.objects.all()

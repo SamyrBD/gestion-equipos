@@ -9,7 +9,7 @@ Un repositorio, dos proyectos Django independientes:
 | Carpeta | Rol | Base de datos | Dónde corre |
 |---|---|---|---|
 | `gestion_ti/` | Catálogo de departamentos y equipos; consume el microservicio | SQLite | Local (por ahora) |
-| `microservicio_mantenimientos/` | API JSON con el historial de mantenimientos | PostgreSQL en Supabase | Render: https://TU-SERVICIO.onrender.com |
+| `microservicio_mantenimientos/` | API JSON con el historial de mantenimientos | PostgreSQL en Supabase | Render: https://microservicio-mantenimientos.onrender.com |
 
 Flujo: `equipos.detail()` → `requests.get(MICROSERVICIO_URL/mantenimientos/<id>/)` → microservicio → Supabase.
 
