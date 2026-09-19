@@ -1,0 +1,24 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block titulo %}Gestión de Equipos TI{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'estilos.css' %}">
+</head>
+<body>
+    <header class="top-nav">
+        <a class="marca" href="{% url 'inicio' %}">Gestión de Equipos TI</a>
+        <a href="{% url 'equipos:index' %}" {% if request.resolver_match.app_name == 'equipos' %}class="activo"{% endif %}>Equipos</a>
+        <a href="{% url 'departamentos:index' %}" {% if request.resolver_match.app_name == 'departamentos' %}class="activo"{% endif %}>Departamentos</a>
+    </header>
+    <main>
+        {% block contenido %}
+        {% endblock %}
+    </main>
+</body>
+</html>

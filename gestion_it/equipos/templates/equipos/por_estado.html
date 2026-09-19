@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block titulo %}Estado {{ estado_code }} · Equipos{% endblock %}
+{% block contenido %}
+<h1>Equipos en estado: {{ estado_code }}</h1>
+<p class="aviso">{{ total }} equipo(s) encontrado(s).</p>
+<table class="lista">
+  <thead><tr><th>Nombre</th><th>Tipo</th><th>Estado</th></tr></thead>
+  <tbody>
+  {% for equipo in equipos %}
+    <tr>
+      <td><a href="{% url 'equipos:detail' equipo.id %}">{{ equipo.nombre }}</a></td>
+      <td>{{ equipo.get_tipo_display }}</td>
+      <td><span class="estado estado-{{ equipo.estado }}">{{ equipo.get_estado_display }}</span></td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block titulo %}{{ equipo.nombre }} · Equipos{% endblock %}
+{% block contenido %}
+<h1>{{ equipo.nombre }}</h1>
+<div class="ficha">
+  <dl>
+    <dt>Departamento</dt><dd>{{ equipo.departamento.nombre }}</dd>
+    <dt>Tipo</dt><dd>{{ equipo.get_tipo_display }}</dd>
+    <dt>Estado</dt><dd><span class="estado estado-{{ equipo.estado }}">{{ equipo.get_estado_display }}</span></dd>
+    <dt>Fecha de compra</dt><dd>{{ equipo.fecha_compra }}</dd>
+  </dl>
+</div>
+
+<h2>Historial de mantenimientos (desde el microservicio)</h2>
+{% if mantenimientos %}
+<table class="lista">
+  <thead><tr><th>Fecha</th><th>Descripción</th><th>Técnico</th></tr></thead>
+  <tbody>
+  {% for m in mantenimientos %}
+    <tr>
+      <td class="dato-microservicio">{{ m.fecha }}</td>
+      <td>{{ m.descripcion }}</td>
+      <td>{{ m.tecnico }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p class="aviso">No hay mantenimientos registrados o el microservicio no respondió.</p>
+{% endif %}
+{% endblock %}

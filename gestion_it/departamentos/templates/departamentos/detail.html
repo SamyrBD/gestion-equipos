@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block titulo %}{{ departamento.nombre }} · Departamentos{% endblock %}
+{% block contenido %}
+<h1>{{ departamento.nombre }}</h1>
+<div class="ficha">
+  <dl>
+    <dt>Encargado</dt><dd>{{ departamento.encargado }}</dd>
+    <dt>Total de equipos</dt><dd>{{ total_equipos }}</dd>
+  </dl>
+</div>
+<h2>Equipos</h2>
+<table class="lista">
+  <thead><tr><th>Nombre</th><th>Tipo</th><th>Estado</th></tr></thead>
+  <tbody>
+  {% for e in equipos_del_departamento %}
+    <tr>
+      <td><a href="{% url 'equipos:detail' e.id %}">{{ e.nombre }}</a></td>
+      <td>{{ e.get_tipo_display }}</td>
+      <td><span class="estado estado-{{ e.estado }}">{{ e.get_estado_display }}</span></td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

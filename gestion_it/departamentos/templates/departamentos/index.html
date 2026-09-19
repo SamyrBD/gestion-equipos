@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block titulo %}Departamentos · Gestión de Equipos TI{% endblock %}
+{% block contenido %}
+<h1>Departamentos</h1>
+<table class="lista">
+  <thead><tr><th>Nombre</th><th>Encargado</th></tr></thead>
+  <tbody>
+  {% for d in lista_departamentos %}
+    <tr><td><a href="{% url 'departamentos:detail' d.id %}">{{ d.nombre }}</a></td><td>{{ d.encargado }}</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

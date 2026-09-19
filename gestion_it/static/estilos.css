@@ -1,0 +1,126 @@
+:root {
+  --bg: #F5F6F8;
+  --surface: #FFFFFF;
+  --border: #D8DEE4;
+  --text: #1B2733;
+  --text-muted: #5B6B7A;
+  --accent: #1F6F78;
+  --estado-act: #2E7D32;
+  --estado-rep: #B5650A;
+  --estado-baj: #B71C1C;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  font-family: "IBM Plex Sans", -apple-system, sans-serif;
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.5;
+}
+
+.dato-microservicio { font-family: "IBM Plex Mono", "SFMono-Regular", monospace; }
+
+header.top-nav {
+  background: var(--text);
+  color: #fff;
+  padding: 0.9rem 1.5rem;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+}
+header.top-nav a {
+  color: #C9D3DC;
+  text-decoration: none;
+  font-size: 0.95rem;
+  padding-bottom: 2px;
+  border-bottom: 2px solid transparent;
+}
+header.top-nav a:hover, header.top-nav a:focus-visible { color: #fff; }
+header.top-nav a.marca { color: #fff; font-weight: 600; font-size: 1rem; }
+header.top-nav a.activo { color: #fff; border-bottom-color: #fff; }
+
+main {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+
+h1 { font-size: 1.65rem; font-weight: 600; margin: 0 0 1.25rem; }
+h2 { font-size: 1.15rem; font-weight: 600; margin: 2rem 0 0.75rem; }
+
+table.lista {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+table.lista th {
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  padding: 0.6rem 0.9rem;
+  border-bottom: 1px solid var(--border);
+}
+table.lista td {
+  padding: 0.65rem 0.9rem;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.95rem;
+}
+table.lista tr:last-child td { border-bottom: none; }
+table.lista tr:hover td { background: #FAFBFC; }
+table.lista a { color: var(--accent); text-decoration: none; font-weight: 500; }
+table.lista a:hover { text-decoration: underline; }
+table.lista td.vacio { color: var(--text-muted); }
+
+.estado {
+  display: inline-block;
+  padding: 0.05rem 0.55rem;
+  border-left: 3px solid;
+  font-size: 0.85rem;
+}
+.estado-ACT { border-color: var(--estado-act); color: var(--estado-act); }
+.estado-REP { border-color: var(--estado-rep); color: var(--estado-rep); }
+.estado-BAJ { border-color: var(--estado-baj); color: var(--estado-baj); }
+
+.ficha {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 1.25rem 1.5rem;
+}
+.ficha dl { margin: 0; display: grid; grid-template-columns: 140px 1fr; row-gap: 0.5rem; }
+.ficha dt { color: var(--text-muted); font-size: 0.9rem; }
+.ficha dd { margin: 0; }
+
+.aviso {
+  border-left: 3px solid var(--text-muted);
+  padding: 0.5rem 0.9rem;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+/* Página principal: cuadrícula de contadores con líneas finas */
+.resumen {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  margin: 1.5rem 0 2rem;
+}
+.resumen a {
+  background: var(--surface);
+  padding: 1rem 1.1rem;
+  color: var(--text);
+  text-decoration: none;
+  border-left: 3px solid transparent;
+}
+.resumen a:hover, .resumen a:focus-visible { background: #FAFBFC; }
+.resumen .cifra { display: block; font-size: 1.9rem; font-weight: 600; line-height: 1.2; }
+.resumen .etiqueta { font-size: 0.85rem; color: var(--text-muted); }
+.resumen a.act { border-left-color: var(--estado-act); }
+.resumen a.rep { border-left-color: var(--estado-rep); }
+.resumen a.baj { border-left-color: var(--estado-baj); }
