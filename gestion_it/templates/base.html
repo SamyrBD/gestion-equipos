@@ -13,9 +13,9 @@
 <body>
     <header class="top-nav">
         <a class="marca" href="{% url 'inicio' %}">Gestión de Equipos TI</a>
-        <a href="{% url 'equipos:index' %}" {% if request.resolver_match.app_name == 'equipos' %}class="activo"{% endif %}>Equipos</a>
+        <a href="{% url 'equipos:index' %}" {% if request.resolver_match.app_name == 'equipos' and request.resolver_match.url_name != 'chat' %}class="activo"{% endif %}>Equipos</a>
         <a href="{% url 'departamentos:index' %}" {% if request.resolver_match.app_name == 'departamentos' %}class="activo"{% endif %}>Departamentos</a>
-        <a href="{% url 'equipos:chat' %}">Asistente</a>
+        <a href="{% url 'equipos:chat' %}" {% if request.resolver_match.url_name == 'chat' %}class="activo"{% endif %}>Asistente</a>
     </header>
     <main>
         {% block contenido %}

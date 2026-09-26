@@ -125,7 +125,58 @@ table.lista td.vacio { color: var(--text-muted); }
 .resumen a.rep { border-left-color: var(--estado-rep); }
 .resumen a.baj { border-left-color: var(--estado-baj); }
 
-.chat { margin-bottom: 1rem; }
-.msg { background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--border); padding: 0.6rem 0.9rem; margin-bottom: 0.5rem; }
-.msg.yo { border-left-color: var(--accent); }
-.msg .quien { display: block; font-size: 0.8rem; color: var(--text-muted); }
+.chat-cabecera {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.chat-cabecera h1 { margin-bottom: 0; }
+
+.btn-secundario {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  padding: 0.4rem 0.85rem;
+  font: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+.btn-secundario:hover { border-color: var(--accent); color: var(--accent); }
+
+.chat {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 1rem;
+  margin: 1rem 0;
+  max-height: 55vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.chat-vacio { color: var(--text-muted); font-size: 0.9rem; margin: 0.5rem 0; }
+
+.msg {
+  max-width: 75%;
+  padding: 0.5rem 0.85rem;
+  border: 1px solid var(--border);
+  align-self: flex-start;
+}
+.msg .quien {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-bottom: 0.15rem;
+}
+.msg.yo {
+  align-self: flex-end;
+  background: var(--bg);
+  border-color: var(--accent);
+}
+
+.chat-form { display: flex; gap: 0.5rem; margin-top: 0; }
+.chat-form input { flex: 1; padding: 0.55rem 0.8rem; border: 1px solid var(--border); font: inherit; }
+.chat-form button { padding: 0.55rem 1.1rem; border: 1px solid var(--accent); background: var(--accent); color: #fff; font: inherit; cursor: pointer; }

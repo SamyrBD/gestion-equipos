@@ -1,7 +1,13 @@
 {% extends "base.html" %}
 {% block titulo %}Asistente · Gestión de Equipos TI{% endblock %}
 {% block contenido %}
-<h1>Asistente de TI</h1>
+<div class="chat-cabecera">
+  <h1>Asistente de TI</h1>
+  <form method="post">
+    {% csrf_token %}
+    <button type="submit" name="nuevo" value="1" class="btn-secundario">Nueva conversación</button>
+  </form>
+</div>
 <p class="aviso">Responde con los datos de tus equipos.</p>
 
 <div class="chat">
@@ -11,19 +17,15 @@
     {{ mensaje.content|linebreaksbr }}
   </div>
 {% empty %}
-  <p class="aviso">Pregunta, por ejemplo: ¿Qué equipos están en reparación?</p>
+  <p class="chat-vacio">Pregunta, por ejemplo: ¿Qué equipos están en reparación?</p>
 {% endfor %}
 </div>
 
 {% if error %}<p class="aviso">{{ error }}</p>{% endif %}
 
-<form method="post" class="buscador">
+<form method="post" class="chat-form">
   {% csrf_token %}
   <input type="text" name="pregunta" placeholder="Escribe tu pregunta" required autofocus>
   <button type="submit">Enviar</button>
-</form>
-<form method="post">
-  {% csrf_token %}
-  <button type="submit" name="nuevo" value="1">Nueva conversación</button>
 </form>
 {% endblock %}
