@@ -6,3 +6,4 @@ gunicorn==26.2.0
 whitenoise==6.12.0
 psycopg[binary]==3.3.6
 supervisor==4.3.0
+python-dotenv
