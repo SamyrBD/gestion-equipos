@@ -10,6 +10,10 @@
     <dt>Fecha de compra</dt><dd>{{ equipo.fecha_compra }}</dd>
   </dl>
 </div>
+<p>
+  <a href="{% url 'equipos:equipo_editar' equipo.id %}">Editar equipo</a>
+  · <a href="{% url 'equipos:equipo_eliminar' equipo.id %}">Eliminar equipo</a>
+</p>
 
 <h2>Historial de mantenimientos (desde el microservicio)</h2>
 {% if mantenimientos %}

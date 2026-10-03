@@ -1,0 +1,13 @@
+{
+  "name": "ms-node",
+  "version": "1.0.0",
+  "description": "Microservicios de insercion, actualizacion y eliminacion de mantenimientos (Node.js)",
+  "private": true,
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "pg": "^8.12.0"
+  }
+}

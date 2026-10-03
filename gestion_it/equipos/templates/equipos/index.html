@@ -2,14 +2,19 @@
 {% block titulo %}Equipos · Gestión de Equipos TI{% endblock %}
 {% block contenido %}
 <h1>Equipos</h1>
+<p><a href="{% url 'equipos:equipo_crear' %}">+ Nuevo equipo</a></p>
 <table class="lista">
-  <thead><tr><th>Nombre</th><th>Tipo</th><th>Estado</th></tr></thead>
+  <thead><tr><th>Nombre</th><th>Tipo</th><th>Estado</th><th>Acciones</th></tr></thead>
   <tbody>
   {% for equipo in lista_equipos %}
     <tr>
       <td><a href="{% url 'equipos:detail' equipo.id %}">{{ equipo.nombre }}</a></td>
       <td>{{ equipo.get_tipo_display }}</td>
       <td><span class="estado estado-{{ equipo.estado }}">{{ equipo.get_estado_display }}</span></td>
+      <td>
+        <a href="{% url 'equipos:equipo_editar' equipo.id %}">Editar</a>
+        · <a href="{% url 'equipos:equipo_eliminar' equipo.id %}">Eliminar</a>
+      </td>
     </tr>
   {% endfor %}
   </tbody>

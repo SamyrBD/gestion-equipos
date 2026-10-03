@@ -2,6 +2,7 @@ import os
 import requests
 from django.shortcuts import get_object_or_404, redirect, render
 from .models import Equipo
+from .forms import EquipoForm
 from google import genai
 from google.genai import types
 
@@ -92,3 +93,33 @@ def chat(request):
 
     request.session["chat"] = historial[-10:]
     return render(request, "equipos/chat.html", {"historial": historial, "error": error})
+
+def equipo_crear(request):
+    if request.method == "POST":
+        form = EquipoForm(request.POST)
+        if form.is_valid():
+            equipo = form.save()
+            return redirect("equipos:detail", equipo_id=equipo.id)
+    else:
+        form = EquipoForm()
+    return render(request, "equipos/equipo_form.html", {"form": form, "accion": "Crear"})
+
+
+def equipo_editar(request, equipo_id):
+    equipo = get_object_or_404(Equipo, pk=equipo_id)
+    if request.method == "POST":
+        form = EquipoForm(request.POST, instance=equipo)
+        if form.is_valid():
+            form.save()
+            return redirect("equipos:detail", equipo_id=equipo.id)
+    else:
+        form = EquipoForm(instance=equipo)
+    return render(request, "equipos/equipo_form.html", {"form": form, "accion": "Editar", "equipo": equipo})
+
+
+def equipo_eliminar(request, equipo_id):
+    equipo = get_object_or_404(Equipo, pk=equipo_id)
+    if request.method == "POST":
+        equipo.delete()
+        return redirect("equipos:index")
+    return render(request, "equipos/equipo_confirm_delete.html", {"equipo": equipo})
