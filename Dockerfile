@@ -35,7 +35,7 @@ RUN cd ms_node && npm install --omit=dev
 COPY --from=compilar_go /salida/ /app/bin/
 
 # 5) Archivos estáticos de gestion_ti (CSS) para WhiteNoise
-RUN python manage.py collectstatic --noinput
+RUN python gestion_it/manage.py collectstatic --noinput
 
 RUN chmod +x entrypoint.sh
 CMD ["./entrypoint.sh"]
