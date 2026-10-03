@@ -1,7 +1,8 @@
 from django.urls import path
-from . import views
+from .api import api  # Importa el objeto 'api' que configuraste con NinjaAPI
 
 app_name = "mantenimientos"
 urlpatterns = [
-    path("mantenimientos/<int:equipo_id>/", views.por_equipo, name="por_equipo"),
+    # Esto conecta TODAS las rutas de Django Ninja de un solo golpe, incluyendo Swagger
+    path("api/", api.urls),
 ]
