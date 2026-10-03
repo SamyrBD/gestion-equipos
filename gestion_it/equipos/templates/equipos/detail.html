@@ -1,8 +1,9 @@
 {% extends "base.html" %}
-{% block titulo %}{{ equipo.nombre }} · Equipos{% endblock %}
+{% block titulo %}{{ equipo.nombre }} | Equipos{% endblock %}
 {% block contenido %}
 <h1>{{ equipo.nombre }}</h1>
-<div class="ficha">
+
+<div class="ficha estado-{{ equipo.estado }}">
   <dl>
     <dt>Departamento</dt><dd>{{ equipo.departamento.nombre }}</dd>
     <dt>Tipo</dt><dd>{{ equipo.get_tipo_display }}</dd>
@@ -10,26 +11,58 @@
     <dt>Fecha de compra</dt><dd>{{ equipo.fecha_compra }}</dd>
   </dl>
 </div>
-<p>
+<p class="acciones">
   <a href="{% url 'equipos:equipo_editar' equipo.id %}">Editar equipo</a>
-  · <a href="{% url 'equipos:equipo_eliminar' equipo.id %}">Eliminar equipo</a>
+  <a class="peligro" href="{% url 'equipos:equipo_eliminar' equipo.id %}">Eliminar equipo</a>
 </p>
 
-<h2>Historial de mantenimientos (desde el microservicio)</h2>
-{% if mantenimientos %}
-<table class="lista">
-  <thead><tr><th>Fecha</th><th>Descripción</th><th>Técnico</th></tr></thead>
-  <tbody>
-  {% for m in mantenimientos %}
-    <tr>
-      <td class="dato-microservicio">{{ m.fecha }}</td>
-      <td>{{ m.descripcion }}</td>
-      <td>{{ m.tecnico }}</td>
-    </tr>
-  {% endfor %}
-  </tbody>
-</table>
+<div class="cabecera">
+  <h2>Historial de mantenimientos</h2>
+  {% if microservicio_ok %}
+  <a class="boton" href="{% url 'equipos:mantenimiento_crear' equipo.id %}">Registrar mantenimiento</a>
+  {% endif %}
+</div>
+
+{% if not microservicio_ok %}
+<p class="aviso aviso-error">
+  Ningún microservicio de consulta respondió, así que no se puede mostrar el historial.
+  <a href="{% url 'equipos:servicios' %}">Revisa el estado de los servicios</a> y recarga la página.
+</p>
 {% else %}
-<p class="aviso">No hay mantenimientos registrados o el microservicio no respondió.</p>
+  {% if usando_respaldo %}
+  <p class="aviso">
+    El servicio principal de consulta no responde. Estos datos vienen del servicio de respaldo
+    ({{ servicio.lenguaje }}).
+  </p>
+  {% endif %}
+
+  {% if mantenimientos %}
+  <table class="lista">
+    <thead><tr><th>Fecha</th><th>Descripción</th><th>Técnico</th><th>Acciones</th></tr></thead>
+    <tbody>
+    {% for m in mantenimientos %}
+      <tr>
+        <td class="dato-microservicio">{{ m.fecha }}</td>
+        <td>{{ m.descripcion }}</td>
+        <td>{{ m.tecnico }}</td>
+        <td class="acciones">
+          <a href="{% url 'equipos:mantenimiento_editar' equipo.id m.id %}">Editar</a>
+          <form method="post" action="{% url 'equipos:mantenimiento_eliminar' equipo.id m.id %}"
+                onsubmit="return confirm('¿Eliminar este mantenimiento? No se puede deshacer.');">
+            {% csrf_token %}
+            <button type="submit" class="btn-enlace peligro">Eliminar</button>
+          </form>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  <p class="fuente">Datos servidos por: {{ servicio.nombre|lower }} ({{ servicio.lenguaje }}).</p>
+  {% else %}
+  <p class="aviso">
+    Este equipo aún no tiene mantenimientos.
+    <a href="{% url 'equipos:mantenimiento_crear' equipo.id %}">Registra el primero</a>.
+  </p>
+  {% endif %}
 {% endif %}
 {% endblock %}

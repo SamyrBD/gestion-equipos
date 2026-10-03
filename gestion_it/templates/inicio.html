@@ -1,33 +1,40 @@
 {% extends "base.html" %}
-{% block titulo %}Inicio · Gestión de Equipos TI{% endblock %}
+{% block titulo %}Panel de control | Gestión de equipos TI{% endblock %}
 {% block contenido %}
 <h1>Panel de control</h1>
-<p class="aviso">Catálogo de equipos tecnológicos por departamento. El historial de mantenimientos de cada equipo se consulta a un microservicio aparte.</p>
 
-<div class="resumen">
-  <a href="{% url 'equipos:index' %}">
-    <span class="cifra">{{ total_equipos }}</span>
-    <span class="etiqueta">Equipos registrados</span>
-  </a>
-  <a href="{% url 'departamentos:index' %}">
-    <span class="cifra">{{ total_departamentos }}</span>
-    <span class="etiqueta">Departamentos</span>
-  </a>
-  <a class="act" href="{% url 'equipos:por_estado' 'act' %}">
-    <span class="cifra">{{ total_activos }}</span>
-    <span class="etiqueta">Activos</span>
-  </a>
-  <a class="rep" href="{% url 'equipos:por_estado' 'rep' %}">
-    <span class="cifra">{{ total_reparacion }}</span>
-    <span class="etiqueta">En reparación</span>
-  </a>
-  <a class="baj" href="{% url 'equipos:por_estado' 'baj' %}">
-    <span class="cifra">{{ total_baja }}</span>
-    <span class="etiqueta">De baja</span>
-  </a>
+{% if total_equipos %}
+<p class="resumen-texto">
+  <a href="{% url 'equipos:index' %}">{{ total_equipos }} equipo{{ total_equipos|pluralize }}</a>
+  en <a href="{% url 'departamentos:index' %}">{{ total_departamentos }} departamento{{ total_departamentos|pluralize }}</a>.
+  El historial de mantenimientos de cada equipo se consulta a los microservicios.
+</p>
+
+<div class="flota">
+  <div class="flota-barra" role="img"
+       aria-label="{{ total_activos }} activos, {{ total_reparacion }} en reparación, {{ total_baja }} de baja">
+    {% if total_activos %}<span class="estado-ACT" style="flex-grow: {{ total_activos }}"></span>{% endif %}
+    {% if total_reparacion %}<span class="estado-REP" style="flex-grow: {{ total_reparacion }}"></span>{% endif %}
+    {% if total_baja %}<span class="estado-BAJ" style="flex-grow: {{ total_baja }}"></span>{% endif %}
+  </div>
+  <div class="flota-leyenda">
+    <a class="estado-ACT" href="{% url 'equipos:por_estado' 'act' %}">
+      <span class="cifra">{{ total_activos }}</span>
+      <span class="etiqueta">Activos</span>
+    </a>
+    <a class="estado-REP" href="{% url 'equipos:por_estado' 'rep' %}">
+      <span class="cifra">{{ total_reparacion }}</span>
+      <span class="etiqueta">En reparación</span>
+    </a>
+    <a class="estado-BAJ" href="{% url 'equipos:por_estado' 'baj' %}">
+      <span class="cifra">{{ total_baja }}</span>
+      <span class="etiqueta">De baja</span>
+    </a>
+  </div>
 </div>
-
-<p><a href="{% url 'equipos:equipo_crear' %}">+ Registrar nuevo equipo</a></p>
+{% else %}
+<p class="aviso">Aún no hay equipos registrados. <a href="{% url 'equipos:equipo_crear' %}">Registra el primero</a>.</p>
+{% endif %}
 
 <h2>Equipos en reparación</h2>
 <table class="lista">
@@ -40,7 +47,7 @@
       <td>{{ e.get_tipo_display }}</td>
     </tr>
   {% empty %}
-    <tr><td colspan="3" class="vacio">No hay equipos en reparación.</td></tr>
+    <tr><td colspan="3" class="vacio">Ningún equipo está en reparación.</td></tr>
   {% endfor %}
   </tbody>
 </table>

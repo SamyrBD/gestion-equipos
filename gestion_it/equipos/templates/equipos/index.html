@@ -1,8 +1,10 @@
 {% extends "base.html" %}
-{% block titulo %}Equipos · Gestión de Equipos TI{% endblock %}
+{% block titulo %}Equipos | Gestión de equipos TI{% endblock %}
 {% block contenido %}
-<h1>Equipos</h1>
-<p><a href="{% url 'equipos:equipo_crear' %}">+ Nuevo equipo</a></p>
+<div class="cabecera">
+  <h1>Equipos</h1>
+  <a class="boton" href="{% url 'equipos:equipo_crear' %}">Nuevo equipo</a>
+</div>
 <table class="lista">
   <thead><tr><th>Nombre</th><th>Tipo</th><th>Estado</th><th>Acciones</th></tr></thead>
   <tbody>
@@ -11,11 +13,13 @@
       <td><a href="{% url 'equipos:detail' equipo.id %}">{{ equipo.nombre }}</a></td>
       <td>{{ equipo.get_tipo_display }}</td>
       <td><span class="estado estado-{{ equipo.estado }}">{{ equipo.get_estado_display }}</span></td>
-      <td>
+      <td class="acciones">
         <a href="{% url 'equipos:equipo_editar' equipo.id %}">Editar</a>
-        · <a href="{% url 'equipos:equipo_eliminar' equipo.id %}">Eliminar</a>
+        <a class="peligro" href="{% url 'equipos:equipo_eliminar' equipo.id %}">Eliminar</a>
       </td>
     </tr>
+  {% empty %}
+    <tr><td colspan="4" class="vacio">Aún no hay equipos. Crea el primero con el botón "Nuevo equipo".</td></tr>
   {% endfor %}
   </tbody>
 </table>

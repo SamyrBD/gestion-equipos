@@ -1,15 +1,17 @@
 {% extends "base.html" %}
-{% block titulo %}{{ accion }} equipo · Equipos{% endblock %}
+{% block titulo %}{{ accion }} equipo | Equipos{% endblock %}
 {% block contenido %}
 <h1>{{ accion }} equipo</h1>
-<form method="post">
+<form method="post" class="formulario">
   {% csrf_token %}
   {{ form.as_p }}
-  <button type="submit">Guardar</button>
-  {% if equipo %}
-    <a href="{% url 'equipos:detail' equipo.id %}">Cancelar</a>
-  {% else %}
-    <a href="{% url 'equipos:index' %}">Cancelar</a>
-  {% endif %}
+  <div class="acciones">
+    <button type="submit">Guardar equipo</button>
+    {% if equipo %}
+      <a href="{% url 'equipos:detail' equipo.id %}">Cancelar</a>
+    {% else %}
+      <a href="{% url 'equipos:index' %}">Cancelar</a>
+    {% endif %}
+  </div>
 </form>
 {% endblock %}

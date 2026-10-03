@@ -1,182 +1,270 @@
+/* ==========================================================================
+   Gestión de equipos TI - estilos
+   Idea: inventario de TI. Etiqueta de activo (cinta amarilla), LED de estado
+   y una barra que muestra la proporción de la flota. Todo lo demás, sobrio.
+   ========================================================================== */
+
+/* 1. Variables (cambiar un color aquí lo cambia en todo el sitio) ---------- */
 :root {
-  --bg: #F5F6F8;
-  --surface: #FFFFFF;
-  --border: #D8DEE4;
-  --text: #1B2733;
-  --text-muted: #5B6B7A;
-  --accent: #1F6F78;
-  --estado-act: #2E7D32;
-  --estado-rep: #B5650A;
-  --estado-baj: #B71C1C;
+  --aluminio: #E4E8EB;   /* fondo de la página */
+  --papel: #FAFBFB;      /* superficie del contenido */
+  --tinta: #17303A;      /* texto y barra superior */
+  --pizarra: #51646E;    /* texto secundario */
+  --cinta: #F2C230;      /* acento: botones y sección activa */
+  --linea: #C9D1D6;      /* bordes y separadores */
+  --aviso-fondo: #FFF6D6;
+
+  --led-ok: #1E8A52;     /* activo / en línea */
+  --led-aviso: #C26E00;  /* en reparación */
+  --led-baja: #7B8996;   /* de baja */
+  --led-error: #B3261E;  /* sin respuesta / peligro */
+
+  --fuente-titulo: "Barlow Semi Condensed", "Arial Narrow", sans-serif;
+  --fuente-texto: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --fuente-codigo: "IBM Plex Mono", ui-monospace, Consolas, monospace;
 }
 
-* { box-sizing: border-box; }
+/* 2. Base ------------------------------------------------------------------ */
+*, *::before, *::after { box-sizing: border-box; }
 
 body {
-  font-family: "IBM Plex Sans", -apple-system, sans-serif;
   margin: 0;
-  background: var(--bg);
-  color: var(--text);
-  line-height: 1.5;
+  background: var(--aluminio);
+  color: var(--tinta);
+  font: 400 1rem/1.55 var(--fuente-texto);
 }
-
-.dato-microservicio { font-family: "IBM Plex Mono", "SFMono-Regular", monospace; }
-
-header.top-nav {
-  background: var(--text);
-  color: #fff;
-  padding: 0.9rem 1.5rem;
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 0.5rem 1.5rem;
-}
-header.top-nav a {
-  color: #C9D3DC;
-  text-decoration: none;
-  font-size: 0.95rem;
-  padding-bottom: 2px;
-  border-bottom: 2px solid transparent;
-}
-header.top-nav a:hover, header.top-nav a:focus-visible { color: #fff; }
-header.top-nav a.marca { color: #fff; font-weight: 600; font-size: 1rem; }
-header.top-nav a.activo { color: #fff; border-bottom-color: #fff; }
 
 main {
-  max-width: 880px;
-  margin: 0 auto;
-  padding: 2rem 1.5rem 4rem;
+  max-width: 66rem;
+  margin: 1.5rem auto 3rem;
+  padding: 2rem clamp(1rem, 4vw, 2.5rem) 2.5rem;
+  background: var(--papel);
+  border: 1px solid var(--linea);
+  border-radius: 4px;
 }
 
-h1 { font-size: 1.65rem; font-weight: 600; margin: 0 0 1.25rem; }
-h2 { font-size: 1.15rem; font-weight: 600; margin: 2rem 0 0.75rem; }
+h1, h2 { font-family: var(--fuente-titulo); font-weight: 600; line-height: 1.1; margin: 0 0 0.75rem; }
+h1 { font-size: clamp(2rem, 5vw, 2.6rem); }
+h2 { font-size: 1.5rem; margin-top: 2rem; }
 
-table.lista {
-  width: 100%;
-  border-collapse: collapse;
-  background: var(--surface);
-  border: 1px solid var(--border);
+a { color: var(--tinta); text-decoration-thickness: 1px; text-underline-offset: 0.2em; }
+a:hover { text-decoration-color: var(--cinta); text-decoration-thickness: 3px; }
+
+:focus-visible { outline: 3px solid var(--tinta); outline-offset: 2px; }
+input[type="hidden"] { display: none; }
+
+.fuente { color: var(--pizarra); font-size: 0.9rem; margin: 0.25rem 0 1rem; }
+
+/* 3. Barra superior -------------------------------------------------------- */
+.top-nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: 0 0.25rem;
+  padding: 0 clamp(1rem, 4vw, 2rem);
+  background: var(--tinta);
 }
-table.lista th {
+.top-nav a {
+  color: #fff;
+  text-decoration: none;
+  padding: 0.9rem 0.8rem 0.75rem;
+  border-bottom: 3px solid transparent;
+}
+.top-nav a:hover { border-bottom-color: rgba(242, 194, 48, 0.55); }
+.top-nav a.activo { border-bottom-color: var(--cinta); font-weight: 600; }
+.top-nav a:focus-visible { outline-color: var(--cinta); }
+.top-nav .marca {
+  margin-right: auto;
+  padding-left: 0;
+  font-family: var(--fuente-titulo);
+  font-size: 1.35rem;
+  font-weight: 600;
+}
+.top-nav .nav-accion {
+  align-self: center;
+  margin-left: 0.5rem;
+  padding: 0.4rem 0.85rem;
+  background: var(--cinta);
+  color: var(--tinta);
+  font-weight: 600;
+  border: 0;
+  border-radius: 3px;
+}
+.top-nav .nav-accion:hover { background: #E5B51C; }
+
+/* 4. Estado: un LED encendido junto al texto ------------------------------- */
+.estado-ACT, .estado-OK { --led: var(--led-ok); }
+.estado-REP { --led: var(--led-aviso); }
+.estado-BAJ { --led: var(--led-baja); }
+.estado-CAIDO { --led: var(--led-error); }
+
+.estado { white-space: nowrap; }
+.estado::before {
+  content: "";
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 0.5rem;
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 50%;
+  background: var(--led, var(--led-baja));
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--led, var(--led-baja)) 22%, transparent);
+}
+
+/* 5. Panel de control: la barra de la flota (lo memorable) ----------------- */
+.resumen-texto { max-width: 46rem; color: var(--pizarra); }
+.resumen-texto a { color: var(--tinta); font-weight: 500; }
+
+.flota { margin: 1.25rem 0 2rem; }
+.flota-barra {
+  display: flex;
+  gap: 3px;
+  height: 2.75rem;
+  transform-origin: left;
+  animation: crecer 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+.flota-barra span { flex-basis: 0; min-width: 0; background: var(--led); }  /* el ancho lo da flex-grow (en el HTML) */
+.flota-leyenda {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+  gap: 1rem;
+  margin-top: 0.9rem;
+}
+.flota-leyenda a {
+  display: block;
+  padding: 0.35rem 0 0.35rem 0.85rem;
+  border-left: 5px solid var(--led);
+  text-decoration: none;
+}
+.flota-leyenda a:hover { background: var(--aviso-fondo); }
+.flota-leyenda .cifra { display: block; font: 600 2.25rem/1 var(--fuente-titulo); }
+.flota-leyenda .etiqueta { color: var(--pizarra); font-size: 0.9rem; }
+
+@keyframes crecer { from { transform: scaleX(0); } }
+
+/* 6. Tablas ---------------------------------------------------------------- */
+.lista { width: 100%; border-collapse: collapse; margin: 1rem 0 1.25rem; font-variant-numeric: tabular-nums; }
+.lista th {
   text-align: left;
   font-weight: 600;
-  font-size: 0.85rem;
-  color: var(--text-muted);
-  padding: 0.6rem 0.9rem;
-  border-bottom: 1px solid var(--border);
-}
-table.lista td {
-  padding: 0.65rem 0.9rem;
-  border-bottom: 1px solid var(--border);
-  font-size: 0.95rem;
-}
-table.lista tr:last-child td { border-bottom: none; }
-table.lista tr:hover td { background: #FAFBFC; }
-table.lista a { color: var(--accent); text-decoration: none; font-weight: 500; }
-table.lista a:hover { text-decoration: underline; }
-table.lista td.vacio { color: var(--text-muted); }
-
-.estado {
-  display: inline-block;
-  padding: 0.05rem 0.55rem;
-  border-left: 3px solid;
-  font-size: 0.85rem;
-}
-.estado-ACT { border-color: var(--estado-act); color: var(--estado-act); }
-.estado-REP { border-color: var(--estado-rep); color: var(--estado-rep); }
-.estado-BAJ { border-color: var(--estado-baj); color: var(--estado-baj); }
-
-.ficha {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  padding: 1.25rem 1.5rem;
-}
-.ficha dl { margin: 0; display: grid; grid-template-columns: 140px 1fr; row-gap: 0.5rem; }
-.ficha dt { color: var(--text-muted); font-size: 0.9rem; }
-.ficha dd { margin: 0; }
-
-.aviso {
-  border-left: 3px solid var(--text-muted);
-  padding: 0.5rem 0.9rem;
-  color: var(--text-muted);
   font-size: 0.9rem;
+  color: var(--pizarra);
+  padding: 0.5rem 0.75rem;
+  border-bottom: 2px solid var(--tinta);
 }
+.lista td { padding: 0.7rem 0.75rem; border-bottom: 1px solid var(--linea); vertical-align: top; }
+.lista td.vacio { padding: 1.5rem; text-align: center; color: var(--pizarra); }
+.lista td.url { font-family: var(--fuente-codigo); font-size: 0.82rem; color: var(--pizarra); word-break: break-all; }
+.dato-microservicio { white-space: nowrap; }
 
-/* Página principal: cuadrícula de contadores con líneas finas */
-.resumen {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 1px;
-  background: var(--border);
-  border: 1px solid var(--border);
-  margin: 1.5rem 0 2rem;
-}
-.resumen a {
-  background: var(--surface);
-  padding: 1rem 1.1rem;
-  color: var(--text);
+/* 7. Botones y acciones ---------------------------------------------------- */
+button, .boton {
+  display: inline-block;
+  padding: 0.5rem 1.1rem;
+  background: var(--cinta);
+  color: var(--tinta);
+  font: 600 1rem var(--fuente-texto);
   text-decoration: none;
-  border-left: 3px solid transparent;
-}
-.resumen a:hover, .resumen a:focus-visible { background: #FAFBFC; }
-.resumen .cifra { display: block; font-size: 1.9rem; font-weight: 600; line-height: 1.2; }
-.resumen .etiqueta { font-size: 0.85rem; color: var(--text-muted); }
-.resumen a.act { border-left-color: var(--estado-act); }
-.resumen a.rep { border-left-color: var(--estado-rep); }
-.resumen a.baj { border-left-color: var(--estado-baj); }
-
-.chat-cabecera {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
-.chat-cabecera h1 { margin-bottom: 0; }
-
-.btn-secundario {
-  background: none;
-  border: 1px solid var(--border);
-  color: var(--text-muted);
-  padding: 0.4rem 0.85rem;
-  font: inherit;
-  font-size: 0.85rem;
+  border: 1px solid var(--tinta);
+  border-radius: 3px;
   cursor: pointer;
 }
-.btn-secundario:hover { border-color: var(--accent); color: var(--accent); }
+button:hover, .boton:hover { background: #E5B51C; }
 
-.chat {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  padding: 1rem;
+.btn-secundario { background: transparent; font-weight: 500; font-size: 0.9rem; padding: 0.4rem 0.85rem; }
+.btn-secundario:hover { background: var(--aviso-fondo); }
+
+.btn-peligro { background: #fff; color: var(--led-error); border-color: var(--led-error); }
+.btn-peligro:hover { background: var(--led-error); color: #fff; }
+
+.btn-enlace {                       /* botón que parece enlace (para formularios dentro de tablas) */
+  padding: 0;
+  background: none;
+  border: 0;
+  font: inherit;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+.btn-enlace:hover { background: none; }
+.peligro { color: var(--led-error); }
+
+.acciones { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 1.25rem; }
+td.acciones { display: table-cell; }
+td.acciones > * { margin-right: 1rem; }
+td.acciones form, form.en-linea { display: inline; margin: 0; }
+
+.cabecera { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 0.5rem 1rem; }
+.cabecera h2 { margin-top: 1.5rem; }
+
+/* 8. Ficha del equipo (etiqueta de activo) --------------------------------- */
+.ficha {
+  max-width: 34rem;
   margin: 1rem 0;
-  max-height: 55vh;
-  overflow-y: auto;
+  padding: 1rem 1.25rem;
+  border: 1px solid var(--linea);
+  border-left: 6px solid var(--led, var(--led-baja));
+}
+.ficha dl { display: grid; grid-template-columns: 9rem 1fr; gap: 0.5rem 1rem; margin: 0; }
+.ficha dt { color: var(--pizarra); }
+.ficha dd { margin: 0; }
+
+/* 9. Formularios ----------------------------------------------------------- */
+.formulario p { display: grid; gap: 0.25rem; margin: 0 0 1rem; }
+.formulario label { font-weight: 500; }
+input[type="text"], input[type="date"], input[type="number"], select, textarea {
+  width: 100%;
+  max-width: 28rem;
+  padding: 0.55rem 0.7rem;
+  background: #fff;
+  color: var(--tinta);
+  font: inherit;
+  border: 1px solid var(--pizarra);
+  border-radius: 3px;
+}
+.errorlist { margin: 0 0 0.25rem; padding: 0; list-style: none; color: var(--led-error); font-size: 0.9rem; }
+.helptext { color: var(--pizarra); font-size: 0.85rem; }
+
+/* 10. Avisos y mensajes ---------------------------------------------------- */
+.aviso, .mensaje {
+  margin: 1rem 0;
+  padding: 0.65rem 1rem;
+  background: var(--aviso-fondo);
+  border-left: 5px solid var(--cinta);
+}
+.aviso-error, .mensaje.error { border-left-color: var(--led-error); }
+.mensaje.success { border-left-color: var(--led-ok); }
+.mensajes { margin: 0; padding: 0; list-style: none; }
+
+/* 11. Chat ----------------------------------------------------------------- */
+.chat-cabecera { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 1rem; }
+.chat-cabecera h1 { margin-bottom: 0; }
+.chat {
   display: flex;
   flex-direction: column;
   gap: 0.6rem;
+  max-height: 55vh;
+  margin: 1rem 0;
+  padding: 1rem;
+  overflow-y: auto;
+  background: #fff;
+  border: 1px solid var(--linea);
+}
+.chat-vacio { margin: 0.5rem 0; color: var(--pizarra); font-size: 0.9rem; }
+.msg { align-self: flex-start; max-width: 75%; padding: 0.5rem 0.85rem; border: 1px solid var(--linea); }
+.msg .quien { display: block; margin-bottom: 0.15rem; color: var(--pizarra); font-size: 0.8rem; }
+.msg.yo { align-self: flex-end; background: var(--aviso-fondo); border-color: var(--cinta); }
+.chat-form { display: flex; gap: 0.5rem; }
+.chat-form input { flex: 1; max-width: none; }
+
+/* 12. Pantallas pequeñas y accesibilidad ----------------------------------- */
+@media (max-width: 40rem) {
+  main { margin: 0; border-radius: 0; border-left: 0; border-right: 0; }
+  .lista { display: block; overflow-x: auto; }       /* la tabla se desplaza, la página no */
+  .ficha dl { grid-template-columns: 1fr; gap: 0.1rem; }
+  .ficha dd { margin-bottom: 0.6rem; }
+  .msg { max-width: 92%; }
 }
 
-.chat-vacio { color: var(--text-muted); font-size: 0.9rem; margin: 0.5rem 0; }
-
-.msg {
-  max-width: 75%;
-  padding: 0.5rem 0.85rem;
-  border: 1px solid var(--border);
-  align-self: flex-start;
+@media (prefers-reduced-motion: reduce) {
+  .flota-barra { animation: none; }
 }
-.msg .quien {
-  display: block;
-  font-size: 0.75rem;
-  color: var(--text-muted);
-  margin-bottom: 0.15rem;
-}
-.msg.yo {
-  align-self: flex-end;
-  background: var(--bg);
-  border-color: var(--accent);
-}
-
-.chat-form { display: flex; gap: 0.5rem; margin-top: 0; }
-.chat-form input { flex: 1; padding: 0.55rem 0.8rem; border: 1px solid var(--border); font: inherit; }
-.chat-form button { padding: 0.55rem 1.1rem; border: 1px solid var(--accent); background: var(--accent); color: #fff; font: inherit; cursor: pointer; }

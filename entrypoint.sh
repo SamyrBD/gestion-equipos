@@ -1,0 +1,9 @@
+#!/bin/sh
+# Se ejecuta cada vez que arranca el contenedor en Render.
+set -e
+
+echo ">> Aplicando migraciones de gestion_ti..."
+python /app/gestion_ti/manage.py migrate --noinput
+
+echo ">> Arrancando todos los servicios con supervisord..."
+exec supervisord -c /app/supervisord.conf

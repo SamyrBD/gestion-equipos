@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block titulo %}Asistente · Gestión de Equipos TI{% endblock %}
+{% block titulo %}Asistente | Gestión de equipos TI{% endblock %}
 {% block contenido %}
 <div class="chat-cabecera">
   <h1>Asistente de TI</h1>
@@ -8,7 +8,7 @@
     <button type="submit" name="nuevo" value="1" class="btn-secundario">Nueva conversación</button>
   </form>
 </div>
-<p class="aviso">Responde con los datos de tus equipos.</p>
+<p class="fuente">Responde con los datos de tus equipos.</p>
 
 <div class="chat">
 {% for mensaje in historial %}
@@ -21,7 +21,7 @@
 {% endfor %}
 </div>
 
-{% if error %}<p class="aviso">{{ error }}</p>{% endif %}
+{% if error %}<p class="aviso aviso-error">{{ error }}</p>{% endif %}
 
 <form method="post" class="chat-form">
   {% csrf_token %}

@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block titulo %}{{ accion }} mantenimiento | {{ equipo.nombre }}{% endblock %}
+{% block contenido %}
+<h1>{{ accion }} mantenimiento</h1>
+<p class="fuente">Equipo: <a href="{% url 'equipos:detail' equipo.id %}">{{ equipo.nombre }}</a></p>
+<form method="post" class="formulario">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <div class="acciones">
+    <button type="submit">Guardar mantenimiento</button>
+    <a href="{% url 'equipos:detail' equipo.id %}">Cancelar</a>
+  </div>
+</form>
+{% endblock %}

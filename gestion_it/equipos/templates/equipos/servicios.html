@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block titulo %}Estado de los servicios | Gestión de equipos TI{% endblock %}
+{% block head_extra %}<meta http-equiv="refresh" content="10">{% endblock %}
+{% block contenido %}
+<h1>Estado de los servicios</h1>
+<p class="fuente">Esta página se actualiza sola cada 10 segundos.</p>
+
+{% if consulta_activa %}
+<p class="aviso">
+  Consulta activa: <strong>{{ consulta_activa.nombre|lower }}</strong> ({{ consulta_activa.lenguaje }}).
+  {% if consulta_activa.clave != "consulta_principal" %}El servicio principal no responde; el sistema cambió al respaldo.{% endif %}
+</p>
+{% else %}
+<p class="aviso aviso-error">Ningún servicio de consulta responde. El historial de mantenimientos no está disponible.</p>
+{% endif %}
+
+<table class="lista">
+  <thead><tr><th>Servicio</th><th>Lenguaje</th><th>Dirección interna</th><th>Estado</th>{% if puede_controlar %}<th>Demo</th>{% endif %}</tr></thead>
+  <tbody>
+  {% for s in servicios %}
+    <tr>
+      <td>{{ s.nombre }}</td>
+      <td>{{ s.lenguaje }}</td>
+      <td class="url">{{ s.url }}</td>
+      <td>
+        <span class="estado {% if s.vivo %}estado-OK{% else %}estado-CAIDO{% endif %}">
+          {% if s.vivo %}En línea ({{ s.ms }} ms){% else %}Sin respuesta{% endif %}
+        </span>
+      </td>
+      {% if puede_controlar %}
+      <td>
+        <form method="post" action="{% url 'equipos:controlar_servicio' s.clave 'stop' %}" class="en-linea">
+          {% csrf_token %}<button type="submit" class="btn-secundario">Apagar</button>
+        </form>
+        <form method="post" action="{% url 'equipos:controlar_servicio' s.clave 'start' %}" class="en-linea">
+          {% csrf_token %}<button type="submit" class="btn-secundario">Encender</button>
+        </form>
+      </td>
+      {% endif %}
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+<p class="fuente">Todos los servicios corren dentro de un mismo contenedor en Render. Si el servicio gratuito se duerme tras 15 minutos sin uso, la primera visita tarda cerca de un minuto en despertarlo todo.</p>
+{% endblock %}

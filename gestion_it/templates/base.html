@@ -4,21 +4,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{% block titulo %}Gestión de Equipos TI{% endblock %}</title>
+    <title>{% block titulo %}Gestión de equipos TI{% endblock %}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600&family=IBM+Plex+Mono:wght@400&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'estilos.css' %}">
+    {% block head_extra %}{% endblock %}
 </head>
 <body>
     <header class="top-nav">
-        <a class="marca" href="{% url 'inicio' %}">Gestión de Equipos TI</a>
-        <a href="{% url 'equipos:index' %}" {% if request.resolver_match.app_name == 'equipos' and request.resolver_match.url_name != 'chat' %}class="activo"{% endif %}>Equipos</a>
-        <a href="{% url 'equipos:equipo_crear' %}">+ Nuevo equipo</a>
+        <a class="marca" href="{% url 'inicio' %}">Gestión de equipos TI</a>
+        <a href="{% url 'equipos:index' %}" {% if request.resolver_match.app_name == 'equipos' and request.resolver_match.url_name != 'chat' and request.resolver_match.url_name != 'servicios' %}class="activo"{% endif %}>Equipos</a>
         <a href="{% url 'departamentos:index' %}" {% if request.resolver_match.app_name == 'departamentos' %}class="activo"{% endif %}>Departamentos</a>
         <a href="{% url 'equipos:chat' %}" {% if request.resolver_match.url_name == 'chat' %}class="activo"{% endif %}>Asistente</a>
+        <a href="{% url 'equipos:servicios' %}" {% if request.resolver_match.url_name == 'servicios' %}class="activo"{% endif %}>Servicios</a>
+        <a class="nav-accion" href="{% url 'equipos:equipo_crear' %}">Nuevo equipo</a>
     </header>
     <main>
+        {% if messages %}
+        <ul class="mensajes" role="status">
+            {% for message in messages %}
+            <li class="mensaje {{ message.tags }}">{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
         {% block contenido %}
         {% endblock %}
     </main>
